@@ -1,0 +1,12 @@
+{{ .Chart.Name }} has been deployed.
+
+Release:   {{ .Release.Name }}
+Namespace: {{ .Release.Namespace }}
+
+To reach the API locally, port-forward the service:
+
+  kubectl --namespace {{ .Release.Namespace }} port-forward svc/{{ include "capoeira-api.fullname" . }} 8080:{{ .Values.service.port }}
+
+Then request a counter for an attacking move (example, adjust once the route is finalized):
+
+  curl "http://localhost:8080/counter?move=Armada"

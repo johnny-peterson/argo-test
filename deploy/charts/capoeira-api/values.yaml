@@ -1,0 +1,52 @@
+# Default values for the capoeira-api chart.
+# Override via `helm install -f my-values.yaml` or through the Argo CD Application.
+
+replicaCount: 1
+
+image:
+  # PLACEHOLDER: replace with your built image after building/pushing the Dockerfile.
+  # e.g. ghcr.io/johnny-peterson/capoeira-api
+  repository: capoeira-api
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Port the Express app listens on (matches the PORT env below and the spec server.js).
+containerPort: 3000
+
+service:
+  type: ClusterIP
+  port: 80
+
+# Injected into the container. The API reads PORT.
+env:
+  - name: PORT
+    value: "3000"
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 250m
+    memory: 128Mi
+
+# Probes hit the root path, which returns a 404 JSON body but still confirms the
+# process is up and serving. Adjust once the API exposes a dedicated health route.
+livenessProbe:
+  enabled: true
+  path: /
+  initialDelaySeconds: 5
+  periodSeconds: 10
+readinessProbe:
+  enabled: true
+  path: /
+  initialDelaySeconds: 3
+  periodSeconds: 10
+
+podAnnotations: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

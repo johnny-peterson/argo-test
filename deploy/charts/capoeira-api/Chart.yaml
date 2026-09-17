@@ -1,0 +1,17 @@
+apiVersion: v2
+name: capoeira-api
+description: A minimal Helm chart for the Capoeira Moves REST API
+type: application
+
+# Chart version — bump this on chart changes.
+version: 0.1.0
+
+# Version of the app being deployed. Kept aligned with the image tag by default.
+appVersion: "0.1.0"
+
+keywords:
+  - capoeira
+  - api
+  - express
+maintainers:
+  - name: johnny.peterson

@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: capoeira-api
+  namespace: argocd
+  # Keeps the Application from being pruned before its child resources.
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    # Point this at your Git remote once the repo is pushed.
+    repoURL: https://github.com/johnny-peterson/argo-test.git
+    targetRevision: HEAD
+    path: deploy/charts/capoeira-api
+    helm:
+      releaseName: capoeira-api
+      # Inline overrides for local testing. Prefer a values file in Git for real use.
+      values: |
+        replicaCount: 1
+        image:
+          repository: capoeira-api
+          tag: "0.1.0"
+          pullPolicy: IfNotPresent
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: capoeira
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
